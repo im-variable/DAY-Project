@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+# AUTH_USER_MODEL = 'authentication.User'
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
+    'authentication.apps.AuthenticationConfig',
     'rest_framework',
     'corsheaders',
 ]
@@ -77,13 +78,41 @@ WSGI_APPLICATION = 'DAY.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        "Auth Token eg [Bearer (JWT) ]": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'authentication.backends.JWTAuthentication',
+    )
+}
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'day_db',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -123,12 +152,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
-}
 
+# JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+
+JWT_SECRET_KEY = '*&_g1f6+5-@*_1&530oh0n^-%cft-el8j0^*5u3wm7y^k3vd$1'
 CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+
