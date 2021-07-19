@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# AUTH_USER_MODEL = 'authentication.User'
+AUTH_USER_MODEL = 'authentication.User'
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,10 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api.apps.ApiConfig',
+    'application.apps.ApplicationConfig',
     'authentication.apps.AuthenticationConfig',
     'rest_framework',
     'corsheaders',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -72,18 +73,9 @@ TEMPLATES = [
     },
 ]
 
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+
 WSGI_APPLICATION = 'DAY.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
@@ -97,22 +89,35 @@ SWAGGER_SETTINGS = {
 
 
 REST_FRAMEWORK = {
+    'NON_FIELD_ERRORS_KEYS': 'error',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'authentication.backends.JWTAuthentication',
-    )
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+ )
 }
 
+
+# Database
+# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'day_db',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'day_db',
+#         'USER': 'root',
+#         'PASSWORD': 'root',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -155,8 +160,19 @@ STATIC_URL = '/static/'
 
 # JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
 
-JWT_SECRET_KEY = '*&_g1f6+5-@*_1&530oh0n^-%cft-el8j0^*5u3wm7y^k3vd$1'
+# JWT_SECRET_KEY = '*&_g1f6+5-@*_1&530oh0n^-ft-el8j0^*5u3wm7y^k3vd$1'
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_POST = '587'
+EMAIL_HOST_USER = 'noreplyuser97@gmail.com'
+EMAIL_HOST_PASSWORD = 'rmds@google'
+
+# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
